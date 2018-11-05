@@ -1,0 +1,86 @@
+Example Query:
+Select 'DATA', emp_id, emp_salary, emp_name from employee_records;  -----Must add Extra dummy column in the resultSet!
+
+
++------+--------------+-----------------+---------------+
+|col1  |emp_id        |emp_salary       |emp_name       |
++------+--------------+-----------------+---------------+
+|DATA  |0000201X      |         8,597.15|Bob Semnata    |
+|DATA  |0000202X      |         2,531.15|Alex Bula      |
+|DATA  |0000203X      |        12,596.15|John Morissey  |
+|DATA  |0000204X      |         2,547.15|Martin	Buckley |
+|DATA  |0000205X      |           397.15|Joe Pise       |--------------------------------------Log File
+|DATA  |0000206X      |        54,531.15|Andrea	Fillipe |
+|DATA  |0000207X      |         3,592.15|Luke Skywalk   |
+|DATA  |0000208X      |         2,522.15|Josh Evans     |
+|DATA  |0000209X      |           572.15|Ann Stark      |
+|DATA  |0000210X      |         9,541.15|Michael Strange|
+
+
+DATA column is added to grep everything after you get first DATA instance.
+Step 1 : First we grep the content from DATA, i.e. 
+
+|DATA  |0000201X      |         8,597.15|Bob Semnata    |
+|DATA  |0000202X      |         2,531.15|Alex Bula      |
+|DATA  |0000203X      |        12,596.15|John Morissey  |
+|DATA  |0000204X      |         2,547.15|Martin	Buckley |
+|DATA  |0000205X      |           397.15|Joe Pise       |--------------------------------------File stats1
+|DATA  |0000206X      |        54,531.15|Andrea	Fillipe |
+|DATA  |0000207X      |         3,592.15|Luke Skywalk   |
+|DATA  |0000208X      |         2,522.15|Josh Evans     |
+|DATA  |0000209X      |           572.15|Ann Stark      |
+|DATA  |0000210X      |         9,541.15|Michael Strange|
+
+Step 2: Store the headers of the sql.log in a text file:
+
+emp_id,emp_salary,emp_name--------------------------------------File stats2
+
+
+Step 3: We remove commas from the values/name(if any) as it will cause problem in generation of CSV
+|DATA  |0000201X      |         8597.15|Bob Semnata    |
+|DATA  |0000202X      |         2531.15|Alex Bula      |
+|DATA  |0000203X      |        12596.15|John Morissey  |
+|DATA  |0000204X      |         2547.15|Martin	Buckley|
+|DATA  |0000205X      |          397.15|Joe Pise       |--------------------------------------File stats3
+|DATA  |0000206X      |        54531.15|Andrea	Fillipe|
+|DATA  |0000207X      |         3592.15|Luke Skywalk   |
+|DATA  |0000208X      |         2522.15|Josh Evans     |
+|DATA  |0000209X      |          572.15|Ann Stark      |
+|DATA  |0000210X      |         9541.15|Michael Strange|
+
+Step 4: Replace all | with " , " i.e.:
+,DATA  ,0000201X      ,         8597.15,Bob Semnata    ,
+,DATA  ,0000202X      ,         2531.15,Alex Bula      ,
+,DATA  ,0000203X      ,        12596.15,John Morissey  ,
+,DATA  ,0000204X      ,         2547.15,Martin	Buckley,
+,DATA  ,0000205X      ,          397.15,Joe Pise       ,--------------------------------------File stats4
+,DATA  ,0000206X      ,        54531.15,Andrea	Fillipe,
+,DATA  ,0000207X      ,         3592.15,Luke Skywalk   ,
+,DATA  ,0000208X      ,         2522.15,Josh Evans     ,
+,DATA  ,0000209X      ,          572.15,Ann Stark      ,
+,DATA  ,0000210X      ,         9541.15,Michael Strange,
+
+Step 5: Remove ,DATA  , from stats 4 file:
+0000201X      ,         8597.15,Bob Semnata    ,
+0000202X      ,         2531.15,Alex Bula      ,
+0000203X      ,        12596.15,John Morissey  ,
+0000204X      ,         2547.15,Martin	Buckley,
+0000205X      ,          397.15,Joe Pise       ,--------------------------------------File stats5
+0000206X      ,        54531.15,Andrea	Fillipe,
+0000207X      ,         3592.15,Luke Skywalk   ,
+0000208X      ,         2522.15,Josh Evans     ,
+0000209X      ,          572.15,Ann Stark      ,
+0000210X      ,         9541.15,Michael Strange,
+
+Step 6: Merge header with stats5 file into a CSV:
+emp_id,emp_salary,emp_name
+0000201X      ,         8597.15,Bob Semnata    ,
+0000202X      ,         2531.15,Alex Bula      ,
+0000203X      ,        12596.15,John Morissey  ,
+0000204X      ,         2547.15,Martin	Buckley,
+0000205X      ,          397.15,Joe Pise       ,--------------------------------------Final csv file
+0000206X      ,        54531.15,Andrea	Fillipe,
+0000207X      ,         3592.15,Luke Skywalk   ,
+0000208X      ,         2522.15,Josh Evans     ,
+0000209X      ,          572.15,Ann Stark      ,
+0000210X      ,         9541.15,Michael Strange,
