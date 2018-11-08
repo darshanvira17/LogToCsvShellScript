@@ -1,2 +1,2 @@
 # LogToCsvShellScript
-Turn log file into CSV file where other Softwares like SQuirreL, SQL Developer, etc can't be used
+Turn SQL log file into CSV file where other Softwares like SQuirreL, SQL Developer, etc can't be used
